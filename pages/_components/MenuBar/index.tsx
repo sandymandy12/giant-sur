@@ -1,67 +1,68 @@
-import { useState, useEffect, MouseEvent, memo } from 'react'
-import moment from 'moment'
-import Menu from './_components/Menu'
-import { useStoreActions, useStoreState } from '../../../store'
+import { useState, useEffect, MouseEvent, memo } from "react";
+import moment from "moment";
+import Menu from "./_components/Menu";
+import { useStoreActions, useStoreState } from "../../../store";
+import MyModal from "./_components/Menu/Modal";
 
-const menuItems: string[] = ['File', 'Edit', 'View', 'Go', 'Window', 'Help']
+const menuItems: string[] = ["File", "Edit", "View", "Go", "Window", "Help"];
 
 const MenuBar = () => {
-  const [currentActiveMenu, setCurrentActiveMenu] = useState<string>('')
-  const [time, setTime] = useState<string>('')
-  const [date, setDate] = useState<string>('')
-  const isMenuOpen = useStoreState((state) => state.menuBar.isMenuOpen)
-  const closeMenu = useStoreActions((actions) => actions.menuBar.closeMenu)
-  const openMenu = useStoreActions((actions) => actions.menuBar.openMenu)
+  const [currentActiveMenu, setCurrentActiveMenu] = useState<string>("");
+  const [time, setTime] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const isMenuOpen = useStoreState((state) => state.menuBar.isMenuOpen);
+  const closeMenu = useStoreActions((actions) => actions.menuBar.closeMenu);
+  const openMenu = useStoreActions((actions) => actions.menuBar.openMenu);
 
   const calculateDate = () => {
-    const currentDate = moment()
-    const dayName: string = currentDate.format('dddd').substring(0, 3)
-    const monthName: string = currentDate.format('MMM').substring(0, 3)
-    const dayOfMonth: string = currentDate.format('DD')
-    const newDate = `${dayName} ${monthName} ${dayOfMonth}`
+    const currentDate = moment();
+    const dayName: string = currentDate.format("dddd").substring(0, 3);
+    const monthName: string = currentDate.format("MMM").substring(0, 3);
+    const dayOfMonth: string = currentDate.format("DD");
+    const newDate = `${dayName} ${monthName} ${dayOfMonth}`;
     setDate((prevDate: string) => {
       if (prevDate !== newDate) {
-        return newDate
+        return newDate;
       }
-      return prevDate
-    })
-  }
+      return prevDate;
+    });
+  };
 
   const calculateTime = () => {
-    const currentTime = moment()
-    const hour: string = currentTime.format('hh').substring(0, 3)
-    const minute: string = currentTime.format('mm').substring(0, 3)
-    const type: string = currentTime.format('A')
-    const newTime: string = `${hour}:${minute} ${type}`
+    const currentTime = moment();
+    const hour: string = currentTime.format("hh").substring(0, 3);
+    const minute: string = currentTime.format("mm").substring(0, 3);
+    const type: string = currentTime.format("A");
+    const newTime: string = `${hour}:${minute} ${type}`;
     setTime((prevTime: string) => {
       if (prevTime !== newTime) {
-        return newTime
+        return newTime;
       }
-      return prevTime
-    })
-  }
+      return prevTime;
+    });
+  };
 
   useEffect(() => {
-    calculateDate()
-    calculateTime()
+    calculateDate();
+    calculateTime();
 
     setInterval(() => {
-      calculateDate()
-      calculateTime()
-    }, 1000)
-  }, [])
+      calculateDate();
+      calculateTime();
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     if (!isMenuOpen) {
-      setCurrentActiveMenu('')
+      setCurrentActiveMenu("");
     }
-  }, [isMenuOpen])
+  }, [isMenuOpen]);
 
   useEffect(() => {
     if (currentActiveMenu) {
-      openMenu()
+      openMenu();
     }
-  }, [currentActiveMenu, openMenu])
+  }, [currentActiveMenu, openMenu]);
 
   return (
     <div
@@ -72,69 +73,69 @@ const MenuBar = () => {
         <button
           className="pl-4 pr-1 ml-1.5 rounded-sm relative cursor-pointer"
           onClick={(e: MouseEvent<HTMLElement>) => {
-            e.stopPropagation()
-            setCurrentActiveMenu((past) => (past !== 'Apple' ? 'Apple' : ''))
+            e.stopPropagation();
+            setCurrentActiveMenu((past) => (past !== "Apple" ? "Apple" : ""));
           }}
           onMouseEnter={() => {
-            if (currentActiveMenu && currentActiveMenu !== 'Apple') {
-              setCurrentActiveMenu('Apple')
+            if (currentActiveMenu && currentActiveMenu !== "Apple") {
+              setCurrentActiveMenu("Apple");
             }
           }}
         >
           <img alt="apple icon" className="w-3.5" src="images/apple-logo.png" />
-          {currentActiveMenu === 'Apple' && (
+          {currentActiveMenu === "Apple" && (
             <Menu
               title={currentActiveMenu}
               items={[
                 {
-                  title: 'About This Mac',
+                  title: "About This Mac",
                   separator: true,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'System Preferences',
+                  title: "System Preferences",
                   separator: false,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'App Store...',
+                  title: "App Store...",
                   separator: true,
-                  rightLabel: '8 updates',
+                  rightLabel: "8 updates",
                 },
                 {
-                  title: 'Recent Items',
+                  title: "Recent Items",
                   separator: true,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Force Quit',
+                  title: "Force Quit",
                   separator: true,
-                  rightLabel: '⌥⌘⎋',
+                  rightLabel: "⌥⌘⎋",
                 },
                 {
-                  title: 'Sleep',
+                  title: "Sleep",
                   separator: false,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Restart...',
+                  title: "Restart...",
                   separator: false,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Shut Down...',
+                  title: "Shut Down...",
                   separator: true,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Lock Screen',
+                  title: "Lock Screen",
                   separator: false,
-                  rightLabel: '^⌘Q',
+                  rightLabel: "^⌘Q",
                 },
                 {
-                  title: 'Log Out Soroush...',
+                  title: "Log Out Soroush...",
                   separator: false,
-                  rightLabel: '⇧⌘Q',
+                  rightLabel: "⇧⌘Q",
                 },
               ]}
             />
@@ -143,54 +144,54 @@ const MenuBar = () => {
         <button
           className="pl-4 relative"
           onClick={(e: MouseEvent<HTMLElement>) => {
-            e.stopPropagation()
-            setCurrentActiveMenu((past) => (past !== 'Finder' ? 'Finder' : ''))
+            e.stopPropagation();
+            setCurrentActiveMenu((past) => (past !== "Finder" ? "Finder" : ""));
           }}
           onMouseEnter={() => {
-            if (currentActiveMenu && currentActiveMenu !== 'Finder') {
-              setCurrentActiveMenu('Finder')
+            if (currentActiveMenu && currentActiveMenu !== "Finder") {
+              setCurrentActiveMenu("Finder");
             }
           }}
         >
           <span className="font-bold text-white text-sm">Finder</span>
-          {currentActiveMenu === 'Finder' && (
+          {currentActiveMenu === "Finder" && (
             <Menu
               title={currentActiveMenu}
               items={[
                 {
-                  title: 'About Finder',
+                  title: "About Finder",
                   separator: true,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Preferences...',
+                  title: "Preferences...",
                   separator: true,
-                  rightLabel: '⌘ ,',
+                  rightLabel: "⌘ ,",
                 },
                 {
-                  title: 'Empty Trash...',
+                  title: "Empty Trash...",
                   separator: true,
-                  rightLabel: '⇧⌘⌫',
+                  rightLabel: "⇧⌘⌫",
                 },
                 {
-                  title: 'Services',
+                  title: "Services",
                   separator: true,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
                 {
-                  title: 'Hide Finder',
+                  title: "Hide Finder",
                   separator: false,
-                  rightLabel: '⌘H',
+                  rightLabel: "⌘H",
                 },
                 {
-                  title: 'Hide Others',
+                  title: "Hide Others",
                   separator: false,
-                  rightLabel: '⌥⌘H',
+                  rightLabel: "⌥⌘H",
                 },
                 {
-                  title: 'Show All',
+                  title: "Show All",
                   separator: false,
-                  rightLabel: '',
+                  rightLabel: "",
                 },
               ]}
             />
@@ -202,12 +203,12 @@ const MenuBar = () => {
               key={item}
               className="pl-5 text-sm relative"
               onClick={(e: MouseEvent<HTMLElement>) => {
-                e.stopPropagation()
-                setCurrentActiveMenu((past) => (past !== item ? item : ''))
+                e.stopPropagation();
+                setCurrentActiveMenu((past) => (past !== item ? item : ""));
               }}
               onMouseEnter={() => {
                 if (currentActiveMenu && currentActiveMenu !== item) {
-                  setCurrentActiveMenu(item)
+                  setCurrentActiveMenu(item);
                 }
               }}
             >
@@ -219,12 +220,12 @@ const MenuBar = () => {
                     {
                       title: `About ${item}`,
                       separator: true,
-                      rightLabel: '',
+                      rightLabel: "",
                     },
                     {
-                      title: 'Preferences...',
+                      title: "Preferences...",
                       separator: false,
-                      rightLabel: `⌘P${item.split('')[0]}`,
+                      rightLabel: `⌘P${item.split("")[0]}`,
                     },
                   ]}
                 />
@@ -234,6 +235,14 @@ const MenuBar = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center items-center">
+        {/* <button className="w-4 mr-5">
+          <img
+            alt="menubar icon"
+            className="w-full"
+            src="/images/magnifier-icon.png"
+          />
+        </button> */}
+        <MyModal />
         <button className="w-8 h-5 mr-5 mt-0.5">
           <img
             alt="menubar icon"
@@ -248,13 +257,7 @@ const MenuBar = () => {
             src="/images/wifi-icon.png"
           />
         </button>
-        <button className="w-4 mr-5">
-          <img
-            alt="menubar icon"
-            className="w-full"
-            src="/images/magnifier-icon.png"
-          />
-        </button>
+
         <button className="w-3.5 mr-5">
           <img
             alt="menubar icon"
@@ -275,7 +278,7 @@ const MenuBar = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default memo(MenuBar)
+export default memo(MenuBar);

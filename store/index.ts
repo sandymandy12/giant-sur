@@ -1,20 +1,38 @@
-import { useMemo } from 'react'
-import { createStore, action, persist, Action, Store, createTypedHooks } from 'easy-peasy'
+import { useMemo } from "react";
+import {
+  createStore,
+  action,
+  persist,
+  Action,
+  Store,
+  createTypedHooks,
+} from "easy-peasy";
 
 interface MenuBar {
-  isMenuOpen: boolean,
-  closeMenu: Action<MenuBar>,
-  openMenu: Action<MenuBar>,
+  isMenuOpen: boolean;
+  closeMenu: Action<MenuBar>;
+  openMenu: Action<MenuBar>;
+}
+interface SearchBar {
+  query: string;
+  isMenuOpen: boolean;
+  closeMenu: Action<SearchBar>;
+  openMenu: Action<SearchBar>;
 }
 
 export interface StoreModel {
-  menuBar: MenuBar,
+  menuBar: MenuBar;
+  searchBar: SearchBar;
 }
 
 interface InitialState {
   menuBar: {
-    isMenuOpen: boolean,
-  }
+    isMenuOpen: boolean;
+  };
+  searchBar: {
+    query: string;
+    isMenuOpen: boolean;
+  };
 }
 
 let store: Store | undefined;
@@ -28,50 +46,71 @@ const initialState: InitialState = {
   menuBar: {
     isMenuOpen: false,
   },
-}
+  searchBar: {
+    isMenuOpen: false,
+    query: "command + f",
+  },
+};
 
-const menuBarModel: MenuBar= {
+const menuBarModel: MenuBar = {
   ...initialState.menuBar,
   closeMenu: action((state) => {
     if (state.isMenuOpen) {
-      state.isMenuOpen = false
+      state.isMenuOpen = false;
     }
   }),
   openMenu: action((state) => {
     if (!state.isMenuOpen) {
-      state.isMenuOpen = true
+      state.isMenuOpen = true;
     }
   }),
-}
+};
+const searchBarModel: SearchBar = {
+  ...initialState.searchBar,
+  closeMenu: action((state) => {
+    if (state.isMenuOpen) {
+      state.isMenuOpen = false;
+    }
+  }),
+  openMenu: action((state) => {
+    if (!state.isMenuOpen) {
+      state.isMenuOpen = true;
+    }
+  }),
+};
 
 const storeModel: StoreModel = {
   menuBar: menuBarModel,
-}
+  searchBar: searchBarModel,
+};
 
 function initStore(preloadedState = initialState) {
-  return createStore<StoreModel, InitialState>(persist(storeModel, { allow: [] }), {
-    initialState: preloadedState,
-  })
+  return createStore<StoreModel, InitialState>(
+    persist(storeModel, { allow: [] }),
+    {
+      initialState: preloadedState,
+    }
+  );
 }
 
 export const initializeStore = (preloadedState: InitialState) => {
-  let _store = store ?? initStore(preloadedState)
+  let _store = store ?? initStore(preloadedState);
 
   if (preloadedState && store) {
     _store = initStore({
       ...store.getState(),
       ...preloadedState,
-    })
-    store = undefined
+    });
+    store = undefined;
   }
 
-  if (typeof window === 'undefined') return _store
-  if (!store) store = _store
+  if (typeof window === "undefined") return _store;
+  if (!store) store = _store;
 
-  return _store
-}
+  return _store;
+};
 
 export function useStore(initialState: InitialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState])
-  return store
+  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  return store;
 }
