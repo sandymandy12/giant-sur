@@ -1,5 +1,5 @@
 import { useRef, memo, MutableRefObject, useState } from "react";
-import { useStoreActions } from "../../../store";
+import { useStoreActions, useStoreState } from "../../../store";
 import { Tooltip } from "./Tooltip";
 
 const dockButtons: { title: string; logo: string }[] = [
@@ -51,10 +51,10 @@ const dockButtons: { title: string; logo: string }[] = [
     title: "Note",
     logo: "images/note-logo.png",
   },
-  {
-    title: "Reminders",
-    logo: "images/reminders-logo.png",
-  },
+  // {
+  //   title: "Reminders",
+  //   logo: "images/reminders-logo.png",
+  // },
   {
     title: "Settings",
     logo: "images/settings-logo.png",
@@ -69,7 +69,9 @@ const Dock = () => {
   const dockButtonsWrapper =
     useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>;
 
+  const activeDock = useStoreState((state) => state.dockBar.active);
   const closeMenu = useStoreActions((actions) => actions.menuBar.closeMenu);
+  const openMenu = useStoreActions((actions) => actions.dockBar.openMenu);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
   const handleItemsMouseEnter = (itemIndex: number) => {
@@ -129,7 +131,7 @@ const Dock = () => {
     }
   };
 
-  const handleItemsClick = (itemIndex: number) => {
+  const handleItemsClick = (itemIndex: number, itemTitle: string) => {
     // closeMenu();
     setActiveIndex(itemIndex);
   };
@@ -147,7 +149,7 @@ const Dock = () => {
             style={{ transition: "all ease .2s" }}
             onMouseEnter={() => handleItemsMouseEnter(i)}
             onMouseLeave={() => handleItemsMouseLeave(i)}
-            onClick={() => handleItemsClick(i)}
+            onClick={() => handleItemsClick(i, item.title)}
           >
             <img
               alt="dock icon"

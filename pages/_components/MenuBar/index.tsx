@@ -14,7 +14,7 @@ const MenuBar = () => {
   const closeMenu = useStoreActions((actions) => actions.menuBar.closeMenu);
   const openMenu = useStoreActions((actions) => actions.menuBar.openMenu);
 
-  const calculateDate = () => {
+const calculateDate = () => {
     const currentDate = moment();
     const dayName: string = currentDate.format("dddd").substring(0, 3);
     const monthName: string = currentDate.format("MMM").substring(0, 3);

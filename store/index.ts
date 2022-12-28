@@ -20,9 +20,24 @@ interface SearchBar {
   openMenu: Action<SearchBar>;
 }
 
+// export type DockItem =
+//   | "Messages"
+//   | "Music"
+//   | "Finder"
+//   | "Settings"
+//   | "Note"
+//   | "Reminders";
+
+interface DockBar {
+  active: string;
+  closeMenu: Action<DockBar>;
+  openMenu: Action<DockBar>;
+}
+
 export interface StoreModel {
   menuBar: MenuBar;
   searchBar: SearchBar;
+  dockBar: DockBar;
 }
 
 interface InitialState {
@@ -32,6 +47,9 @@ interface InitialState {
   searchBar: {
     query: string;
     isMenuOpen: boolean;
+  };
+  dockBar: {
+    active: string;
   };
 }
 
@@ -50,6 +68,9 @@ const initialState: InitialState = {
     isMenuOpen: false,
     query: "command + f",
   },
+  dockBar: {
+    active: "Finder",
+  },
 };
 
 const menuBarModel: MenuBar = {
@@ -65,6 +86,7 @@ const menuBarModel: MenuBar = {
     }
   }),
 };
+
 const searchBarModel: SearchBar = {
   ...initialState.searchBar,
   closeMenu: action((state) => {
@@ -79,9 +101,23 @@ const searchBarModel: SearchBar = {
   }),
 };
 
+const dockBarModel: DockBar = {
+  ...initialState.dockBar,
+  closeMenu: action((state) => {
+    if (state.active) {
+      state.active = "Finder";
+    }
+  }),
+  openMenu: action((state) => {
+    if (state.active) {
+    }
+  }),
+};
+
 const storeModel: StoreModel = {
   menuBar: menuBarModel,
   searchBar: searchBarModel,
+  dockBar: dockBarModel,
 };
 
 function initStore(preloadedState = initialState) {
